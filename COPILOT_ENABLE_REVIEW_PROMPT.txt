@@ -1,0 +1,23 @@
+You are GitHub Copilot CLI doing a staff-engineer review.
+
+TASK: Review only. Write COPILOT_ENABLE_REVIEW.md. Do not modify source, tests, README, or live Codex config.
+
+Read COPILOT_ENABLE_PLAN.md, then inspect src/stella/client.ts, src/bridge/responses-bridge.ts, tests/stella-stream.test.ts if needed. Do NOT read ~/.codex/config.toml or ~/.codex-stella-web/session.json.
+
+## What the executor reports (treat as evidence, verify in code)
+
+P0 verification:
+- status: Auth logged in, integration Active, daemon RUNNING PID 12101 on 127.0.0.1:17842
+- doctor: ALL SYSTEMS HEALTHY, Stella API 13 models, token refresh ok
+- GET /v1/models: 17 friendly text-only IDs, includes stella-auto, no global.*
+- config invariants: PASS (one model=stella-auto, one model_provider=stella, no catalog, no dups)
+- first live /v1/responses probe failed: Stella 422 because empty file_paths[] was sent; then empty text because assistant payload is contents[].text snapshots, not content/delta
+- code fixes: omit empty file_paths; parse contents[] text parts; treat system metadata.is_finished; emit response.failed if Stella errors after SSE headers
+- rebuilt dist, restarted single daemon (stop then serve), tests 34/34
+- second live /v1/responses probe: HTTP 200, STELLA_OK observed, events include output_text.delta and response.completed
+
+P1 (human) is NOT done: user must fully quit and relaunch Codex/ChatGPT Desktop, pick stella-auto, send one chat. Do not claim Desktop enablement complete.
+
+Review against the enablement plan. Verdict: ship with caveats / not ready / ready for human Desktop step. Findings table. What not to do next.
+
+When finished print DONE and the path.

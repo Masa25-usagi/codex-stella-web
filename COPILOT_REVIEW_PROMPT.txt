@@ -1,0 +1,31 @@
+You are GitHub Copilot CLI acting as a staff engineer doing a code review.
+
+TASK: Review only. Do not modify source, tests, or README except write COPILOT_REVIEW.md.
+
+Read, in order:
+1. COPILOT_BRIEF.md
+2. COPILOT_PLAN.md
+3. COPILOT_PLAN_EVAL.md
+4. The current src/, tests/, README.md, package.json
+
+Do NOT read ~/.codex/config.toml or ~/.codex-stella-web/session.json.
+
+Review the implementation against the plan. Be specific: file/function, severity (blocker/bug/risk/nit), whether the plan item was done, missed, or deliberately deferred.
+
+Cover at least:
+- P0 config install/uninstall (duplicates, no model_catalog_json, journal vs surgical restore)
+- Daemon status/stop/pid-file safety and loopback bind
+- Model resolver (Sonnet vs Haiku, gpt-6-astra, ULIDs, image exclusion, /v1/models shape)
+- Responses/Chat Completions SSE contract and tool XML leakage
+- MCP result.isError and stdio stdout contamination
+- Auth 0600 atomic writes
+- README honesty
+- Tests: isolation, the two formerly failing model tests, gaps
+
+Write COPILOT_REVIEW.md with:
+- Summary verdict (ship / ship with caveats / not ready)
+- Findings table
+- What still needs a human (Codex Desktop launch)
+- What you would not do next
+
+When finished print DONE and the path.

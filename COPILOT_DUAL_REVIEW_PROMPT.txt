@@ -1,0 +1,60 @@
+You are GitHub Copilot CLI doing a staff-engineer review.
+
+TASK: Review only. Write COPILOT_DUAL_REVIEW.md. Do not modify source, tests, README, live Codex config, or session files.
+
+Do NOT read ~/.codex/config.toml or ~/.codex-stella-web/session.json.
+
+## Goal of this change
+
+The user uses official Codex / ChatGPT GPT quota day-to-day and wants Stella only when they choose it. The previous setup hijacked the default:
+
+- top-level model = "stella-auto"
+- top-level model_provider = "stella"
+
+That routed ALL Desktop/CLI traffic through the local Stella bridge. Official GPT models (6 Astra, 5.6 Luna, etc.) then failed with "メッセージの生成に失敗しました", and the app fell back from カスタム to GPT-5.6 Luna.
+
+## What the executor changed
+
+Files:
+- src/codex/integration.ts
+- src/config.ts
+- src/cli.ts
+- src/doctor.ts
+- tests/codex-integration.test.ts
+- README.md
+
+Behavior now:
+- setup does NOT overwrite top-level model / model_provider
+- leftover managed model/model_provider lines are stripped and original model is restored
+- [model_providers.stella] remains
+- ~/.codex/stella.config.toml is written with model=stella-auto and model_provider=stella
+- uninstall removes the managed provider block and the managed profile file
+- status/doctor say Stella is optional
+
+## Executor evidence (verify in code, not by reading live config)
+
+- npm test: 35/35 pass
+- tsc build: ok
+- live setup after the code change:
+  - top-level model = gpt-6-astra (exactly one)
+  - no top-level model_provider
+  - no model_catalog_json
+  - [model_providers.stella] present
+  - profile exists: ~/.codex/stella.config.toml with model=stella-auto, model_provider=stella
+  - daemon PID 12101 still running on 127.0.0.1:17842
+- live /v1/responses probe with tools+reasoning still returns HTTP 200
+
+## Review against
+
+1. Official Codex GPT quota remains default.
+2. Stella is opt-in via `codex --profile stella` (Codex v2 profile file next to config.toml).
+3. Re-running setup on a previously hijacked config restores the official default.
+4. Uninstall does not leave the profile file behind if it is managed.
+5. No homemade model_catalog_json.
+6. Do not claim ChatGPT Desktop native model replacement.
+
+Verdict: ready / ready with caveats / not ready.
+Findings table.
+What the human should do next (restart Desktop, try official GPT, then optionally `codex --profile stella`).
+
+When finished print DONE and the path.

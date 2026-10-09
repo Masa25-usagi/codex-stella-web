@@ -1,0 +1,9 @@
+You are GitHub Copilot CLI acting as a senior staff engineer.
+
+TASK: Write an enablement plan ONLY. Do not edit any file except COPILOT_ENABLE_PLAN.md.
+
+Read COPILOT_ENABLE_BRIEF.md in the current directory, then COPILOT_PLAN.md / COPILOT_REVIEW.md if needed. Inspect src/ only if required. Do NOT read ~/.codex/config.toml or ~/.codex-stella-web/session.json. Do not start/stop processes.
+
+Write COPILOT_ENABLE_PLAN.md with ordered P0/P1 steps, exact commands, acceptance checks, rollback, and what the human must do in Codex Desktop. Prefer verification over more code.
+
+When finished print DONE and the path.

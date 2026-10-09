@@ -1,0 +1,40 @@
+{
+  "name": "codex-stella-web",
+  "version": "1.0.0",
+  "description": "Bridge OpenAI Codex CLI and OpenAI API clients to Stella AI (stella-ai.net) for thinking and reasoning without per-token API costs.",
+  "main": "dist/index.js",
+  "type": "module",
+  "bin": {
+    "codex-stella-web": "./bin/codex-stella-web.js"
+  },
+  "scripts": {
+    "build": "tsc",
+    "start": "node --import tsx src/cli.ts serve",
+    "login": "node --import tsx src/cli.ts login",
+    "doctor": "node --import tsx src/cli.ts doctor",
+    "test": "node --import tsx --test --test-concurrency=1 tests/*.test.ts",
+    "setup": "node --import tsx src/cli.ts setup",
+    "uninstall": "node --import tsx src/cli.ts uninstall"
+  },
+  "keywords": [
+    "codex",
+    "stella-ai",
+    "stella",
+    "openai-bridge",
+    "responses-api",
+    "llm-proxy"
+  ],
+  "license": "MIT",
+  "dependencies": {
+    "playwright-core": "^1.49.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "private": true
+}
